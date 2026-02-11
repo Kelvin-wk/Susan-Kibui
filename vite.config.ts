@@ -1,11 +1,13 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   define: {
     'process.env.API_KEY': JSON.stringify(process.env.API_KEY)
   },
   // Must match your GitHub repo name exactly
-  base: '/Susan-Kibui/'
-});
+  base: '/Susan-Kibui/',
+})
+
