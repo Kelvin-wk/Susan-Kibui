@@ -2,10 +2,16 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { Product, GroundingSource } from "../types";
 import { PRODUCTS } from "../constants";
 
-// The API Key is obtained from the environment variable process.env.API_KEY
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Accessing the API key injected via Vite's define config
+const apiKey = process.env.API_KEY;
+
+const ai = new GoogleGenAI({ apiKey: apiKey || '' });
 
 export const getShoppingAssistantResponse = async (userQuery: string, cartItems: string[]) => {
+  if (!apiKey) {
+    return { text: "The AI assistant is currently offline because the API Key is not configured in the environment settings." };
+  }
+
   const model = "gemini-3-flash-preview";
   
   const productContext = PRODUCTS.map(p => 
@@ -13,21 +19,21 @@ export const getShoppingAssistantResponse = async (userQuery: string, cartItems:
   ).join("\n");
 
   const systemInstruction = `
-    You are the Personal AI Assistant for Susan's Online Shopping Platform. 
-    Our catalog includes high-quality Shoes, Electronics, Accessories, Fashion, Jewelry, Hair Care, and Body Care.
+    You are Nova, the high-end Personal Shopping Assistant for Susan's Market. 
+    Our catalog features elite hardware, premium fashion, and curated lifestyle products.
     
-    Current Catalog:
+    Current Catalog context:
     ${productContext}
     
     User's Current Cart IDs: [${cartItems.join(", ")}]
 
-    Response Requirements:
-    1. Be friendly, professional, and helpful. Mention you are Susan's Shopping Assistant.
-    2. Suggest 1-3 specific products from our catalog if the user asks for recommendations.
-    3. Use your Google Search tool to answer questions about external trends, price comparisons, or product reviews.
-    4. If using Google Search, the results will be used to ground your answer.
-    5. We accept M-Pesa, PayPal, and Visa/Mastercard.
-    6. Keep responses concise but stylish.
+    Your Persona:
+    - Sophisticated, helpful, and knowledgeable about luxury trends and hardware specs.
+    - Always recommend items specifically from our current catalog using their names and prices.
+    - Use the Google Search tool for real-time market trends, tech specs, or comparing our prices with global standards.
+    - If you find external info via search, mention it but prioritize our shop's availability.
+    - Remind users we accept M-Pesa, PayPal, and Cards.
+    - Keep answers concise, formatted for high readability.
   `;
 
   try {
@@ -38,7 +44,7 @@ export const getShoppingAssistantResponse = async (userQuery: string, cartItems:
         systemInstruction,
         temperature: 0.7,
         tools: [{ googleSearch: {} }],
-        thinkingConfig: { thinkingBudget: 0 } // Disable thinking for the assistant to ensure fast response times
+        thinkingConfig: { thinkingBudget: 0 }
       },
     });
 
@@ -62,14 +68,16 @@ export const getShoppingAssistantResponse = async (userQuery: string, cartItems:
       sources: sources.length > 0 ? sources : undefined
     };
   } catch (error) {
-    console.error("Gemini Error:", error);
+    console.error("Gemini Assistant Error:", error);
     return {
-      text: "I am having some trouble connecting to my brain. Please check your internet or try again later!"
+      text: "I encountered a slight technical glitch while browsing the catalog. Please ensure your API Key is valid and active in your deployment settings."
     };
   }
 };
 
 export const getStyleHubRecommendations = async (styleDescription: string) => {
+  if (!apiKey) return [];
+
   const model = "gemini-3-flash-preview";
   
   const productContext = PRODUCTS.map(p => ({
@@ -80,14 +88,13 @@ export const getStyleHubRecommendations = async (styleDescription: string) => {
   }));
 
   const systemInstruction = `
-    You are the 'Susan Style Expert'. Users will describe an occasion or a vibe.
-    Select exactly 3-4 products from our catalog that fit this vibe best.
+    You are the Style Consultant for Susan's Market.
+    Analyze the user's vibe and return exactly 4 product IDs from our catalog that best match their description.
     
-    Catalog Summary:
-    ${JSON.stringify(productContext)}
+    Catalog: ${JSON.stringify(productContext)}
 
-    Output ONLY a JSON array of the product IDs selected. No text or markdown.
-    Example: ["k1", "j1", "f1"]
+    Output ONLY a raw JSON array of the 4 most relevant product IDs.
+    No other text. Example: ["id1", "id2", "id3", "id4"]
   `;
 
   try {
@@ -96,15 +103,17 @@ export const getStyleHubRecommendations = async (styleDescription: string) => {
       contents: styleDescription,
       config: {
         systemInstruction,
-        responseMimeType: "application/json"
+        responseMimeType: "application/json",
+        thinkingConfig: { thinkingBudget: 0 }
       },
     });
 
     const text = response.text || "[]";
-    const ids = JSON.parse(text.trim());
+    const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
+    const ids = JSON.parse(jsonStr);
     return PRODUCTS.filter(p => ids.includes(p.id));
   } catch (error) {
-    console.error("Gemini Style Hub Error:", error);
+    console.error("Style Hub AI Error:", error);
     return [];
   }
 };
