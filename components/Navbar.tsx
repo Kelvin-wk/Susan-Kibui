@@ -135,7 +135,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             {user ? (
-              <div className="flex items-center gap-2 group relative">
+              <div className="flex items-center gap-3 group relative">
                 <div 
                   onClick={handlePhotoClick}
                   className="w-10 h-10 sm:w-11 sm:h-11 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center justify-center text-indigo-600 overflow-hidden cursor-pointer border-2 border-transparent hover:border-indigo-600 transition-all shadow-sm"
@@ -146,6 +146,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                   )}
                 </div>
+                <button 
+                  onClick={onLogout}
+                  className="hidden sm:flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-red-500 hover:text-red-600 transition-colors"
+                  title="Sign Out"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                  Exit
+                </button>
                 <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
               </div>
             ) : (
@@ -195,7 +203,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 <div className="flex items-center gap-3">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
-                  <span className="text-sm font-black uppercase tracking-widest">Open Admin Dashboard</span>
+                  <span className="text-sm font-black uppercase tracking-widest">Admin Dashboard</span>
                 </div>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
               </button>
@@ -211,8 +219,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             ) : (
                <button 
                onClick={onLogout}
-               className="w-full bg-red-50 dark:bg-red-950/20 text-red-500 py-5 rounded-2xl font-black uppercase tracking-widest mt-4"
+               className="w-full bg-red-50 dark:bg-red-950/20 text-red-500 py-5 rounded-2xl font-black uppercase tracking-widest mt-4 flex items-center justify-center gap-3"
              >
+               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
                Sign Out ({user.name})
              </button>
             )}
