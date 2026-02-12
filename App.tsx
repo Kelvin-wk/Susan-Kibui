@@ -107,7 +107,6 @@ const App: React.FC = () => {
     const total = cart.reduce((a, b) => a + b.price * b.quantity, 0);
     await backend.placeOrder(user.id, cart, total, method);
     
-    // Refresh user points
     const updatedUser = await backend.login(user.email);
     setUser(updatedUser);
     localStorage.setItem('susan_market_active_user', JSON.stringify(updatedUser));
@@ -152,11 +151,6 @@ const App: React.FC = () => {
       <div className="fixed inset-0 -z-10 pointer-events-none transition-all">
         <div className="absolute top-[-10%] left-[-10%] w-[65%] h-[65%] bg-indigo-500/10 dark:bg-indigo-600/10 rounded-full blur-[180px] animate-[pulse_12s_ease-in-out_infinite]"></div>
         <div className="absolute bottom-[-10%] right-[-10%] w-[65%] h-[65%] bg-emerald-400/10 dark:bg-emerald-500/10 rounded-full blur-[180px] animate-[pulse_18s_ease-in-out_infinite] [animation-delay:4s]"></div>
-        
-        <div 
-          className="absolute inset-0 opacity-[0.04] dark:opacity-[0.08]" 
-          style={{ backgroundImage: `linear-gradient(to right, #4f46e5 1px, transparent 1px), linear-gradient(to bottom, #4f46e5 1px, transparent 1px)`, backgroundSize: '60px 60px' }}
-        ></div>
       </div>
 
       <Navbar 
@@ -170,7 +164,7 @@ const App: React.FC = () => {
         onUpdateProfilePhoto={handleUpdateProfilePhoto}
       />
 
-      <main className="flex-1 max-w-[1600px] mx-auto w-full px-4 py-8 sm:px-8">
+      <main className="flex-1 max-w-[1800px] mx-auto w-full px-4 py-8 sm:px-8">
         {isLoading && currentPage === 'products' ? (
           <div className="flex flex-col items-center justify-center py-60 space-y-8">
             <div className="w-16 h-16 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
@@ -191,53 +185,54 @@ const App: React.FC = () => {
             )}
 
             {currentPage === 'home' && (
-              <div className="space-y-48 py-8 animate-in fade-in duration-1000">
-                <section className="relative h-[500px] sm:h-[650px] rounded-[4rem] overflow-hidden group shadow-2xl border-8 border-white dark:border-slate-900 bg-slate-900">
+              <div className="space-y-32 py-8 animate-in fade-in duration-1000">
+                <section className="relative h-[500px] sm:h-[600px] rounded-[3rem] overflow-hidden group shadow-2xl border-4 border-white dark:border-slate-900 bg-slate-900">
                   <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=2000" alt="Hero" className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-[4000ms]" />
                   <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-900/30 to-transparent"></div>
-                  <div className="absolute inset-0 flex flex-col items-start justify-center p-8 sm:p-24">
-                    <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-white text-[9px] font-black px-6 py-2.5 rounded-full uppercase tracking-[0.4em] mb-10 border border-white/20">
+                  <div className="absolute inset-0 flex flex-col items-start justify-center p-8 sm:p-20">
+                    <span className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-white text-[9px] font-black px-5 py-2 rounded-full uppercase tracking-[0.4em] mb-6 border border-white/20">
                       Now with Rewards
                     </span>
-                    <h1 className="text-5xl sm:text-8xl font-black text-white mb-10 leading-[0.8] tracking-tighter max-w-5xl">
+                    <h1 className="text-5xl sm:text-[9rem] font-black text-white mb-6 leading-[0.8] tracking-tighter max-w-5xl">
                       Style <span className="text-indigo-400">Earns.</span><br/>
                       <span className="text-slate-400">Rewards.</span>
                     </h1>
-                    <p className="text-xl sm:text-3xl text-slate-300 max-w-2xl mb-16 leading-relaxed font-bold">
+                    <p className="text-lg sm:text-2xl text-slate-300 max-w-xl mb-12 leading-relaxed font-bold">
                       Shop Nairobi's finest hardware and tech. Earn points on every KES spent.
                     </p>
-                    <div className="flex flex-wrap gap-10">
-                      <button onClick={() => setCurrentPage('products')} className="bg-white text-indigo-950 px-16 py-5 rounded-[2.5rem] font-black text-2xl hover:bg-indigo-50 hover:shadow-2xl transition-all active:scale-95">Explore Shop</button>
+                    <div className="flex flex-wrap gap-6">
+                      <button onClick={() => setCurrentPage('products')} className="bg-white text-indigo-950 px-10 py-4 rounded-2xl font-black text-xl hover:bg-indigo-50 hover:shadow-2xl transition-all active:scale-95">Explore Shop</button>
                     </div>
                   </div>
                 </section>
 
-                <section className="relative py-24 px-4 overflow-visible">
-                  <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-24">
+                {/* Restored Susan's Image Section */}
+                <section className="relative py-24 px-4">
+                  <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-20">
                     <div className="w-full lg:w-1/2 relative group">
-                      <div className="absolute -inset-4 bg-gradient-to-tr from-indigo-500 to-emerald-500 rounded-[5.5rem] blur-2xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                      <div className="relative aspect-[3/4] rounded-[5rem] overflow-hidden border-8 border-white dark:border-slate-800 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] bg-slate-200 dark:bg-slate-800 animate-[float_12s_ease-in-out_infinite]">
+                      <div className="absolute -inset-4 bg-gradient-to-tr from-indigo-500 to-emerald-500 rounded-[5rem] blur-2xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                      <div className="relative aspect-[3/4] rounded-[4.5rem] overflow-hidden border-8 border-white dark:border-slate-800 shadow-2xl bg-slate-200 dark:bg-slate-800 animate-[float_12s_ease-in-out_infinite]">
                         <img 
                           src="https://iili.io/fyskfxj.jpg" 
                           alt="Susan Njeri" 
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2000ms]"
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                           onError={(e) => { 
                             (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800'; 
                           }}
                         />
                       </div>
-                      <div className="absolute -bottom-10 -right-10 glass dark:bg-slate-800/80 p-10 rounded-[3.5rem] shadow-2xl border border-slate-100 dark:border-white/10 animate-bounce-slow">
-                        <p className="text-5xl font-black text-indigo-600 tracking-tighter italic">S. Njeri</p>
-                        <p className="text-xs font-black text-slate-400 uppercase tracking-widest mt-3 text-center">Founder & CEO</p>
+                      <div className="absolute -bottom-10 -right-10 glass dark:bg-slate-800/80 p-8 rounded-[3rem] shadow-2xl border border-slate-100 dark:border-white/10 animate-bounce-slow">
+                        <p className="text-4xl font-black text-indigo-600 tracking-tighter italic">S. Njeri</p>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2 text-center">Founder & CEO</p>
                       </div>
                     </div>
 
-                    <div className="flex-1 space-y-12">
-                      <span className="inline-block bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-[11px] font-black px-8 py-3 rounded-full uppercase tracking-[0.4em] shadow-sm">Nairobi's Retail Visionary</span>
-                      <h2 className="text-7xl sm:text-[8rem] font-black text-slate-900 dark:text-white tracking-tighter leading-[0.85]">
+                    <div className="flex-1 space-y-8">
+                      <span className="inline-block bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-[10px] font-black px-6 py-2 rounded-full uppercase tracking-[0.4em] shadow-sm">Nairobi's Retail Visionary</span>
+                      <h2 className="text-5xl sm:text-7xl font-black text-slate-900 dark:text-white tracking-tighter leading-none">
                         The Face of <span className="text-indigo-600 underline decoration-8 decoration-indigo-600/10 underline-offset-[12px]">Luxury.</span>
                       </h2>
-                      <p className="text-3xl text-slate-600 dark:text-slate-300 font-bold leading-relaxed">
+                      <p className="text-2xl text-slate-600 dark:text-slate-300 font-bold leading-relaxed">
                         "Susan's Market isn't just about products; it's about a lifestyle defined by performance hardware and uncompromising style."
                       </p>
                     </div>
@@ -247,11 +242,11 @@ const App: React.FC = () => {
                 <section className="px-4">
                   <div className="flex items-end justify-between mb-12">
                     <div>
-                      <h2 className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter">Market Hotlist</h2>
-                      <p className="text-xl text-slate-500 dark:text-slate-400 mt-3 font-bold">Vetted by Susan Njeri.</p>
+                      <h2 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter">Market Hotlist</h2>
+                      <p className="text-lg text-slate-500 dark:text-slate-400 mt-2 font-bold italic">Vetted by Susan Njeri.</p>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4 sm:gap-6">
                     {featuredProducts.map(p => (
                       <ProductCard key={p.id} product={p} onAdd={() => addToCart(p)} onClick={() => openProductDetail(p)} />
                     ))}
@@ -292,7 +287,7 @@ const App: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4 sm:gap-6">
                   {filteredProducts.length > 0 ? (
                     filteredProducts.map(p => (
                       <ProductCard key={p.id} product={p} onAdd={() => addToCart(p)} onClick={() => openProductDetail(p)} />
