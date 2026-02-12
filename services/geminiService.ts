@@ -2,16 +2,10 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { Product, GroundingSource } from "../types";
 import { PRODUCTS } from "../constants";
 
-// Accessing the API key injected via Vite's define config
-const apiKey = process.env.API_KEY;
-
-const ai = new GoogleGenAI({ apiKey: apiKey || '' });
+// Strictly follow the rule: Use process.env.API_KEY directly in the constructor.
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const getShoppingAssistantResponse = async (userQuery: string, cartItems: string[]) => {
-  if (!apiKey) {
-    return { text: "The AI assistant is currently offline because the API Key is not configured in the environment settings." };
-  }
-
   const model = "gemini-3-flash-preview";
   
   const productContext = PRODUCTS.map(p => 
@@ -67,17 +61,16 @@ export const getShoppingAssistantResponse = async (userQuery: string, cartItems:
       text: response.text || "I'm sorry, I couldn't process that request right now.",
       sources: sources.length > 0 ? sources : undefined
     };
-  } catch (error) {
-    console.error("Gemini Assistant Error:", error);
+  } catch (error: any) {
+    console.error("Gemini Assistant Error Details:", error);
+    // Provide a more helpful error for development/deployment debugging without leaking secrets
     return {
-      text: "I encountered a slight technical glitch while browsing the catalog. Please ensure your API Key is valid and active in your deployment settings."
+      text: `My apologies. I encountered an issue: ${error?.message || "Internal Service Error"}. Please ensure your API deployment has a valid KES Project key configured.`
     };
   }
 };
 
 export const getStyleHubRecommendations = async (styleDescription: string) => {
-  if (!apiKey) return [];
-
   const model = "gemini-3-flash-preview";
   
   const productContext = PRODUCTS.map(p => ({
