@@ -1,0 +1,103 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the platform.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The unique identifier for the user." },
+        "email": { "type": "string", "format": "email", "description": "The user's email address." },
+        "name": { "type": "string", "description": "The user's full name." },
+        "isAdmin": { "type": "boolean", "description": "Whether the user has administrative privileges." },
+        "loyaltyPoints": { "type": "integer", "description": "The number of loyalty points the user has earned." },
+        "profilePhoto": { "type": "string", "description": "The URL of the user's profile photo." },
+        "wishlist": { "type": "array", "items": { "type": "string" }, "description": "The IDs of products in the user's wishlist." }
+      },
+      "required": ["id", "email", "name"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "A customer review for a product.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The unique identifier for the review." },
+        "productId": { "type": "string", "description": "The ID of the product being reviewed." },
+        "userId": { "type": "string", "description": "The ID of the user who wrote the review." },
+        "userName": { "type": "string", "description": "The name of the user who wrote the review." },
+        "rating": { "type": "number", "description": "The rating given to the product (1-5)." },
+        "comment": { "type": "string", "description": "The text of the review." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "The date and time the review was created." }
+      },
+      "required": ["id", "productId", "userId", "userName", "rating", "comment", "createdAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "An item available for purchase.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The unique identifier for the product." },
+        "name": { "type": "string", "description": "The name of the product." },
+        "description": { "type": "string", "description": "A detailed description of the product." },
+        "price": { "type": "number", "description": "The price of the product in KES." },
+        "category": { "type": "string", "description": "The category the product belongs to." },
+        "image": { "type": "string", "description": "The URL of the product's image." },
+        "rating": { "type": "number", "description": "The average rating of the product." },
+        "featured": { "type": "boolean", "description": "Whether the product is featured on the home page." }
+      },
+      "required": ["id", "name", "price", "category", "image"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "A purchase made by a user.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The unique identifier for the order." },
+        "userId": { "type": "string", "description": "The ID of the user who placed the order." },
+        "items": { "type": "array", "items": { "type": "object" }, "description": "The items included in the order." },
+        "total": { "type": "number", "description": "The total cost of the order." },
+        "paymentMethod": { "type": "string", "description": "The method used for payment." },
+        "status": { "type": "string", "description": "The current status of the order." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "The date and time the order was placed." },
+        "pointsEarned": { "type": "integer", "description": "The number of loyalty points earned from this order." }
+      },
+      "required": ["id", "userId", "items", "total", "status", "createdAt"]
+    },
+    "Inquiry": {
+      "title": "Inquiry",
+      "description": "A contact message sent by a user.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The unique identifier for the inquiry." },
+        "name": { "type": "string", "description": "The name of the person sending the inquiry." },
+        "email": { "type": "string", "format": "email", "description": "The email address of the person sending the inquiry." },
+        "subject": { "type": "string", "description": "The subject of the inquiry." },
+        "message": { "type": "string", "description": "The content of the inquiry message." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "The date and time the inquiry was sent." },
+        "read": { "type": "boolean", "description": "Whether the inquiry has been read by an admin." }
+      },
+      "required": ["id", "name", "email", "subject", "message", "createdAt", "read"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile documents."
+    },
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Product catalog documents."
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Order history documents."
+    },
+    "/inquiries/{inquiryId}": {
+      "schema": "Inquiry",
+      "description": "Customer contact messages."
+    },
+    "/reviews/{reviewId}": {
+      "schema": "Review",
+      "description": "Customer reviews for products."
+    }
+  }
+}
